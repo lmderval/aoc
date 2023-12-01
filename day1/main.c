@@ -9,42 +9,20 @@
 
 static int getletterdigit(char *str)
 {
-    if (strncmp(str, "zero", 4) == 0)
-        return 0;
-
-    if (strncmp(str, "one", 3) == 0)
-        return 1;
-
-    if (strncmp(str, "two", 3) == 0)
-        return 2;
-
-    if (strncmp(str, "three", 5) == 0)
-        return 3;
-
-    if (strncmp(str, "four", 4) == 0)
-        return 4;
-
-    if (strncmp(str, "five", 4) == 0)
-        return 5;
-
-    if (strncmp(str, "six", 3) == 0)
-        return 6;
-
-    if (strncmp(str, "seven", 5) == 0)
-        return 7;
-
-    if (strncmp(str, "eight", 5) == 0)
-        return 8;
-
-    if (strncmp(str, "nine", 4) == 0)
-        return 9;
+    char *digits[] = { "zero", "one", "two",   "three", "four",
+                       "five", "six", "seven", "eight", "nine" };
+    for (int i = 0; i <= 9; i++)
+    {
+        if (strncmp(str, digits[i], strlen(digits[i])) == 0)
+            return i;
+    }
 
     return -1;
 }
 
 static int first_digit(char *str)
 {
-    for(size_t i = 0; str[i]; i++)
+    for (size_t i = 0; str[i]; i++)
     {
         if (isdigit(str[i]))
             return str[i] - '0';
@@ -60,7 +38,7 @@ static int first_digit(char *str)
 static int last_digit(char *str)
 {
     int digit = 0;
-    for(size_t i = 0; str[i]; i++)
+    for (size_t i = 0; str[i]; i++)
     {
         if (isdigit(str[i]))
         {
