@@ -1,0 +1,13 @@
+/* read line from stdin */
+function read_line(): string =
+  let
+    var s := ""
+    var c := ""
+  in
+    while (
+      c := getchar();
+      size(c) & c <> "\n"
+    ) do
+      s := concat(s, c);
+    s
+  end

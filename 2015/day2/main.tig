@@ -1,0 +1,38 @@
+let
+  import "../lib/io.tih"
+  import "../lib/math.tih"
+  import "../lib/string.tih"
+
+  var input := ""
+  var total := 0
+  var ribbon := 0
+in
+  while (
+    input := read_line();
+    size(input) <> 0
+  ) do (
+    let
+      var raw_dim := split(input, "x")
+      var dim := int_arr [3] of 0
+      var area := bounded_int_arr(3, 0)
+      var perimeter := bounded_int_arr(3, 0)
+    in
+      for i := 0 to 2 do (
+        dim[i] := string_to_uint(raw_dim.data[i])
+      );
+      for i := 0 to 2 do (
+        area.data[i] := dim[rem(i + 1, 3)] * dim[rem(i + 2, 3)];
+        perimeter.data[i] := 2 * (dim[rem(i + 1, 3)] + dim[rem(i + 2, 3)]);
+        total := total + 2 * area.data[i]
+      );
+      total := total + min(area);
+      ribbon := ribbon + min(perimeter) + dim[0] * dim[1] * dim[2]
+    end
+  );
+  print("total: ");
+  print_int(total);
+  print("\n");
+  print("ribbon: ");
+  print_int(ribbon);
+  print("\n")
+end

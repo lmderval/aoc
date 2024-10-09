@@ -1,0 +1,22 @@
+let
+  import "../lib/string.tih"
+  import "../lib/io.tih"
+
+  var input := read_line()
+  var floor := 0
+  var basement := 0
+in
+  for i := 0 to size(input) - 1 do (
+    floor := if char_at(input, i) = "("
+      then floor + 1
+      else floor - 1;
+    if basement = 0 & floor < 0
+      then basement := i + 1
+  );
+  print("floor: ");
+  print_int(floor);
+  print("\n");
+  print("basement: ");
+  print_int(basement);
+  print("\n")
+end

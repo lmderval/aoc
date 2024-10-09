@@ -1,0 +1,61 @@
+type string_arr = array of string
+type bounded_string_arr = {
+  data: string_arr,
+  size: int
+}
+
+/* create a new bounded_string_arr */
+function bounded_string_arr(n: int, v: string): bounded_string_arr =
+  bounded_string_arr {
+    data = string_arr [n] of v,
+    size = n
+  }
+
+/* return the i-th character of s */
+function char_at(s: string, i: int): string =
+  substring(s, i, 1)
+
+/* convert string representation to unsigned int */
+function string_to_uint(s: string): int =
+  let
+    var n := 0
+    var i_max := size(s) - 1
+    var ord_0 := ord("0")
+    var digit := 0
+  in
+    for i := 0 to i_max do (
+      digit := ord(char_at(s, i)) - ord_0;
+      if digit < 0 | digit > 9
+        then break
+        else n := n * 10 + digit
+    );
+    n
+  end
+
+/* split string on a specific character */
+function split(s: string, c: string): bounded_string_arr =
+  let
+    var begin := 0
+    var size := 0
+    var arr := string_arr [size] of ""
+    var tmp := string_arr [size] of ""
+  in
+    for i := 0 to size(s) do (
+      if i = size(s) | char_at(s, i) = c
+        then (
+          tmp := string_arr [size] of "";
+          for j := 0 to size - 1 do
+            tmp[j] := arr[j];
+          size := size + 1;
+          arr := string_arr [size] of "";
+          for j := 0 to size - 2 do
+            arr[j] := tmp[j];
+          arr[size - 1] := substring(s, begin, i - begin);
+          begin := i + 1
+        )
+    );
+    bounded_string_arr {
+      data = arr,
+      size = size
+    }
+  end
