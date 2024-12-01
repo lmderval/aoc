@@ -1,0 +1,118 @@
+let
+  #define DEBUG
+  #include <inspect.h>
+
+  INSPECTOR(int, x) = print_int(x)
+
+  import "../lib/io.tih"
+  import "../lib/math.tih"
+  import "../lib/string.tih"
+
+  type bst = {
+    value: int,
+    left: bst,
+    right: bst
+  }
+
+  function bst_append(bst: bst, value: int) : bst = (
+    if bst = nil then
+      bst {
+        value = value,
+        left = nil,
+        right = nil
+      }
+    else if value <= bst.value then (
+      bst.left := bst_append(bst.left, value);
+      bst
+    )
+    else (
+      bst.right := bst_append(bst.right, value);
+      bst
+    )
+  )
+
+  function bst_flatten(bst: bst, length: int) : int_arr =
+    let
+      var flatten := int_arr [length] of 0
+      var idx := 0
+
+      function traverse(bst: bst) = (
+        if bst.left <> nil
+          then traverse(bst.left);
+        flatten[idx] := bst.value;
+        idx := idx + 1;
+        if bst.right <> nil
+          then traverse(bst.right)
+      )
+    in
+      traverse(bst);
+      flatten
+    end
+
+  var bst := bst {
+    value = 0,
+    left = nil,
+    right = nil
+  }
+  var input := ""
+  var length := 0
+  var distance := 0
+  var similarity := 0
+
+  function calculate_similarity(left: int_arr, right: int_arr, length: int) : int =
+    let
+      var similarity := 0
+      var i := 0
+      var j := 0
+      var n := 0
+      var l := 0
+      var r := 0
+    in
+      while i < length do (
+        n := left[i];
+        l := 0;
+        while i < length & left[i] = n do (
+          l := l + 1;
+          i := i + 1
+        );
+        while j < length & right[j] < n do (
+          j := j + 1
+        );
+        r := 0;
+        while j < length & right[j] = n do (
+          r := r + 1;
+          j := j + 1
+        );
+        similarity := similarity + n * l * r
+      );
+      similarity
+    end
+in
+  while (
+    input := read_line();
+    size(input) <> 0
+  ) do (
+    let
+      var raw := split(input, " ")
+    in
+      bst.left := bst_append(bst.left, string_to_uint(raw.data[0]));
+      bst.right := bst_append(bst.right, string_to_uint(raw.data[3]));
+      length := length + 1
+    end
+  );
+  let
+    var left := bst_flatten(bst.left, length)
+    var right := bst_flatten(bst.right, length)
+  in
+    for i := 0 to length - 1 do (
+      distance := distance + (
+        if left[i] >= right[i]
+          then left[i] - right[i]
+          else right[i] - left[i]
+      )
+    );
+    similarity := calculate_similarity(left, right, length)
+  end;
+  INSPECT(distance);
+  INSPECT(similarity)
+end

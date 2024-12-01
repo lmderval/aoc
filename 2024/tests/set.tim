@@ -1,0 +1,29 @@
+let
+  #include <set.h>
+
+  type point = {
+    x: int,
+    y: int
+  }
+
+  function create_point(x: int, y: int) : point =
+    point {
+      x = x,
+      y = y
+    }
+
+  DEFINE_HASH(point, p) = p.x + p.y * 16
+  DEFINE_EQUAL(point, left, right) = left.x = right.x & left.y = right.y
+
+  DEFINE_SET(point)
+
+  var set := CREATE_SET(point)
+in
+  APPEND_SET(set, create_point(5, 4));
+  APPEND_SET(set, create_point(5, 8));
+  APPEND_SET(set, create_point(5, 8));
+  APPEND_SET(set, create_point(5, 4));
+  APPEND_SET(set, create_point(3, 2));
+  print_int(SIZE_SET(set));
+  print("\n")
+end

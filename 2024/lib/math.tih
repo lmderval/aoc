@@ -1,0 +1,54 @@
+type int_arr = array of int
+type bounded_int_arr = {
+  data: int_arr,
+  size: int
+}
+
+/* create a new bounded_int_arr */
+function bounded_int_arr(n: int, v: int): bounded_int_arr =
+  bounded_int_arr {
+    data = int_arr [n] of v,
+    size = n
+  }
+
+type int_arr_arr = array of int_arr
+type int_mat = {
+  data: int_arr_arr,
+  width: int,
+  height: int
+}
+
+/* create a new int_mat */
+function int_mat(w: int, h: int, v: int): int_mat =
+  let
+    var mat := int_arr_arr [h] of int_arr [0] of 0
+  in
+    for i := 0 to h - 1 do (
+      mat[i] := int_arr [w] of v
+    );
+    int_mat {
+      data = mat,
+      width = w,
+      height = h
+    }
+  end
+
+/* find minimal value inside an array */
+function min(arr: bounded_int_arr): int =
+  if arr.size = 0
+    then 0
+    else (
+      let
+        var min := arr.data[0]
+      in
+        for i := 1 to arr.size - 1 do (
+          if min > arr.data[i]
+            then min := arr.data[i]
+        );
+        min
+      end
+    )
+
+/* calculate the remainder of the division of a by b */
+function rem(a: int, b: int): int =
+  a - a / b * b
